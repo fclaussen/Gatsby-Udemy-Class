@@ -5,6 +5,7 @@ module.exports = {
     author: `@gatsbyjs`,
   },
   plugins: [
+    `gatsby-plugin-styled-components`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -107,13 +108,17 @@ module.exports = {
           "**/categories",
           "**/posts",
           "**/pages",
+          "**/portfolio",
           "**/media",
           "**/tags",
           "**/taxonomies",
           "**/users",
+          "**/menus",
+          "**/logo",
+          "**/favicon"
         ],
         // Blacklisted routes using glob patterns
-        excludedRoutes: ["**/posts/1456"],
+        excludedRoutes: [],
         // use a custom normalizer which is applied after the built-in ones.
         normalizer: function({ entities }) {
           return entities
