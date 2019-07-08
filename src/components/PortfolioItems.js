@@ -33,9 +33,7 @@ const PortfolioItems = () => {
 							status
 			        featured_media {
 			          id
-			          media_details {
-	                source_url
-			          }
+                source_url
 			        }
 			      }
 			    }
