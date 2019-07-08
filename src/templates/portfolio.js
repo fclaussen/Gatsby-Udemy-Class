@@ -1,24 +1,48 @@
 import React from "react"
 import Layout from '../components/layout'
 import styled from 'styled-components'
+import {graphql} from 'gatsby'
+import Img from 'gatsby-image'
 
-const FeaturedImage = styled.img`
+const FeaturedImage = styled(Img)`
 	max-width: 300px;
 	margin: 16px 0;
 `
 
-export default ({pageContext}) => {
+export const query = graphql`
+	query($slug: String!){
+		wordpressWpPortfolio(slug: {eq: $slug}){
+	    title
+	    content
+	    acf{
+	      live_url
+	    }
+	    featured_media{
+	      localFile{
+	        childImageSharp{
+	          fixed(width:300, height:300){
+	          	...GatsbyImageSharpFixed_withWebp
+	          }
+	        }
+	      }
+	    }
+	  }
+	}
+`
+
+export default ({ data }) => {
+	const portfolio = data.wordpressWpPortfolio;
 	return (
 	  <Layout>
 	    <h1>
-	      {pageContext.title}
+	      {portfolio.title}
 	    </h1>
 	    <div>
 		    <strong>Website URL: </strong>
-		    <a href={pageContext.acf.live_url} target="_blank" rel="noopener noreferrer">{pageContext.acf.live_url}</a>
+		    <a href={portfolio.acf.live_url} target="_blank" rel="noopener noreferrer">{portfolio.acf.live_url}</a>
 	    </div>
-	    <FeaturedImage src={pageContext.featured_media.source_url} />
-	    <div dangerouslySetInnerHTML={{__html: pageContext.content}} />
+	    <FeaturedImage fixed={portfolio.featured_media.localFile.childImageSharp.fixed} />
+	    <div dangerouslySetInnerHTML={{__html: portfolio.content}} />
 	  </Layout>
 	)
 }

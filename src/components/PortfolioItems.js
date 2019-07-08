@@ -1,6 +1,7 @@
 import React from 'react'
-import {graphql, StaticQuery, Link} from 'gatsby'
+import {graphql, useStaticQuery, Link} from 'gatsby'
 import styled from 'styled-components'
+import Img from 'gatsby-image'
 
 const PortfolioItemsWrapper = styled.div`
 	display: flex;
@@ -14,44 +15,49 @@ const PortfolioItem = styled.div`
 	margin: 16px;
 `
 
-const PortfolioImage = styled.img`
+const PortfolioImage = styled(Img)`
 	max-width: 100%;
 `
 
 const PortfolioItems = () => {
+	const data = useStaticQuery(graphql`
+		{
+			allWordpressWpPortfolio{
+		    edges{
+		      node{
+		      	id
+						title
+						content
+						excerpt
+						slug
+						status
+		        featured_media{
+      	      localFile{
+      	        childImageSharp{
+      	          fixed(width:300, height:200){
+      	          	...GatsbyImageSharpFixed_withWebp
+      	          }
+      	        }
+      	      }
+      	    }
+		      }
+		    }
+		  }
+		}
+	`)
 	return (
-		<StaticQuery query={graphql`
-			{
-				allWordpressWpPortfolio{
-			    edges{
-			      node{
-			      	id
-							title
-							content
-							excerpt
-							slug
-							status
-			        featured_media {
-			          id
-                source_url
-			        }
-			      }
-			    }
-			  }
-			}
-		`} render={props => (
-			<PortfolioItemsWrapper>
-				{props.allWordpressWpPortfolio.edges.map(portfolioItem => (
-					<PortfolioItem key={portfolioItem.node.id}>
-						<h2>{portfolioItem.node.title}</h2>
-						<PortfolioImage src={portfolioItem.node.featured_media.source_url} alt="Thumbnail" />
-						<div dangerouslySetInnerHTML={{__html: portfolioItem.node.excerpt}} />
-						<Link to={`/portfolio/${portfolioItem.node.slug}`}>
-							Read More
-						</Link>
-					</PortfolioItem>
-				))}
-			</PortfolioItemsWrapper> )} />
+		<PortfolioItemsWrapper>
+			{data.allWordpressWpPortfolio.edges.map(portfolioItem => (
+				<PortfolioItem key={portfolioItem.node.id}>
+					<h2>{portfolioItem.node.title}</h2>
+					<PortfolioImage fixed={portfolioItem.node.featured_media.localFile.childImageSharp.fixed} alt="Thumbnail" />
+					<div dangerouslySetInnerHTML={{__html: portfolioItem.node.excerpt}} />
+					<Link to={`/portfolio/${portfolioItem.node.slug}`}>
+						Read More
+					</Link>
+				</PortfolioItem>
+			))}
+		</PortfolioItemsWrapper>
 	)
 }
 

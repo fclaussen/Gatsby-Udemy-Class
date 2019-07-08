@@ -17,22 +17,12 @@ exports.createPages = async ({ graphql, actions }) => {
 	const result = await graphql(`
 		{
 			wordpressPage(title: { eq: "Home" }){
-				id
-				link
-				status
-				template
 				slug
-				title
-				content
 			}
 			allWordpressPage(filter: { title: { ne: "Home" } }){
 				edges{
 					node{
-						id
-						title
-						content
 						slug
-						status
 						template
 					}
 				}
@@ -40,33 +30,14 @@ exports.createPages = async ({ graphql, actions }) => {
 			allWordpressWpPortfolio{
 				edges{
 					node{
-						id
-						title
-						content
-						excerpt
 						slug
-						status
-						featured_media {
-		          id
-		          source_url
-		        }
-		        acf{
-		        	live_url
-		        }
 					}
 				}
 			}
 			allWordpressPost {
 				edges {
 					node {
-						wordpress_id
-						title
-						content
-						excerpt
-						date(formatString: "Do MMM YYYY HH:mm")
 						slug
-						status
-						format
 					}
 				}
 			}
@@ -91,26 +62,27 @@ exports.createPages = async ({ graphql, actions }) => {
 	createPage({
     path: `/`,
     component: slash(pageTemplate),
-    context: wordpressPage
+    context: {
+    	slug: wordpressPage.slug
+    }
   })
 	allWordpressPage.edges.forEach(edge => {
-		// Gatsby uses Redux to manage its internal state.
-		// Plugins and sites can use functions like "createPage"
-		// to interact with Gatsby.
 		createPage({
-			// Each page is required to have a `path` as well
-			// as a template component. The `context` is
-			// optional but is often necessary so the template
-			// can query data specific to each page.
 			path: `/${edge.node.slug}/`,
 			component: slash(edge.node.template === 'templates/portfolio-under-content.php' ? portfolioUnderContentTemplate : pageTemplate),
-			context: edge.node,
+			context: {
+				slug: edge.node.slug,
+			}
 		})
 	})
 
 	const postTemplate = path.resolve(`./src/templates/post.js`)
 	const blogArchiveTemplate = path.resolve(`./src/templates/blogArchive.js`)
 	const posts = allWordpressPost.edges;
+	let slugs = [];
+	posts.forEach( (post) => {
+		slugs.push(post.node.slug);
+	});
 	const postsPerPage = 2;
 	const numberOfPages = Math.ceil( posts.length/postsPerPage );
 
@@ -119,7 +91,7 @@ exports.createPages = async ({ graphql, actions }) => {
 			path: index === 0 ? '/blog/' : `/blog/${index + 1}`,
 			component: slash(blogArchiveTemplate),
 			context: {
-				posts: posts.slice(index * postsPerPage, index * postsPerPage + postsPerPage),
+				posts: slugs.slice(index * postsPerPage, index * postsPerPage + postsPerPage),
 				numberOfPages,
 				currentPage: index + 1
 			}
@@ -133,7 +105,9 @@ exports.createPages = async ({ graphql, actions }) => {
 		createPage({
 			path: `/blog/${edge.node.slug}/`,
 			component: slash(postTemplate),
-			context: edge.node,
+			context: {
+				slug: edge.node.slug,
+			}
 		})
 	})
 
@@ -142,7 +116,9 @@ exports.createPages = async ({ graphql, actions }) => {
 		createPage({
 			path: `/portfolio/${edge.node.slug}/`,
 			component: slash(portfolioTemplate),
-			context: edge.node,
+			context: {
+				slug: edge.node.slug,
+			}
 		})
 	})
 }
