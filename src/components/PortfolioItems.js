@@ -34,14 +34,7 @@ const PortfolioItems = () => {
 			        featured_media {
 			          id
 			          media_details {
-			            sizes{
-			              medium {
-			                source_url
-			              }
-			              medium_large{
-			                source_url
-			              }
-			            }
+	                source_url
 			          }
 			        }
 			      }
