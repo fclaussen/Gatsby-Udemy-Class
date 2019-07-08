@@ -31,12 +31,12 @@ const SiteInfo = () => (
 	`} render={props => (
 		<SiteInfoWrapper>
 			{props.allWordpressWpLogo.edges.map(siteLogos => (
-        <Link to="/" key={siteLogos.node.url.source_url}>
+        <Link to="/" key={siteLogos.node}>
           <Img
             fixed={siteLogos.node.url.localFile.childImageSharp.fixed}
             width="100"
             height="auto"
-            fadeIn="false"
+            fadeIn={false}
             objectFit="cover"
             alt="Logo"
           />
