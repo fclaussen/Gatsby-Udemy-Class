@@ -15,13 +15,7 @@ const SiteInfo = () => (
         edges{
           node{
             url{
-              media_details{
-                sizes{
-                  medium{
-                    source_url
-                  }
-                }
-              }
+              source_url
             }
           }
         }
@@ -30,9 +24,9 @@ const SiteInfo = () => (
 	`} render={props => (
 		<SiteInfoWrapper>
 			{props.allWordpressWpLogo.edges.map(siteLogos => (
-        <Link to="/" key={siteLogos.node.url.media_details.sizes.medium.source_url}>
+        <Link to="/" key={siteLogos.node.url.source_url}>
           <img
-            src={siteLogos.node.url.media_details.sizes.medium.source_url}
+            src={siteLogos.node.url.source_url}
             width="100"
             height="auto"
             object-fit="cover"

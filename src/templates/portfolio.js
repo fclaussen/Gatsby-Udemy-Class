@@ -17,7 +17,7 @@ export default ({pageContext}) => {
 		    <strong>Website URL: </strong>
 		    <a href={pageContext.acf.live_url} target="_blank" rel="noopener noreferrer">{pageContext.acf.live_url}</a>
 	    </div>
-	    <FeaturedImage src={pageContext.featured_media.media_details.sizes.medium.source_url} />
+	    <FeaturedImage src={pageContext.featured_media.source_url} />
 	    <div dangerouslySetInnerHTML={{__html: pageContext.content}} />
 	  </Layout>
 	)

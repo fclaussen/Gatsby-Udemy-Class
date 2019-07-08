@@ -48,16 +48,7 @@ exports.createPages = async ({ graphql, actions }) => {
 						status
 						featured_media {
 		          id
-		          media_details {
-		            sizes{
-		              medium {
-		                source_url
-		              }
-		              medium_large{
-		                source_url
-		              }
-		            }
-		          }
+		          source_url
 		        }
 		        acf{
 		        	live_url
