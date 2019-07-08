@@ -36,7 +36,8 @@ const SiteInfo = () => (
             fixed={siteLogos.node.url.localFile.childImageSharp.fixed}
             width="100"
             height="auto"
-            object-fit="cover"
+            fadeIn="false"
+            objectFit="cover"
             alt="Logo"
           />
         </Link>
